@@ -14,6 +14,11 @@ variable "vpc_name" {
   type        = string
 }
 
+variable "subnet_name" {
+  description = "The name of the subnet in the VPC"
+  type        = string
+}
+
 variable "instance_name" {
   description = "Cloud SQL instance name"
   type        = string

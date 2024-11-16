@@ -4,6 +4,13 @@ data "google_compute_network" "vpc" {
   project = var.project_id
 }
 
+# Fetch the existing Subnet
+data "google_compute_subnetwork" "subnet" {
+  name    = var.subnet_name
+  region  = var.region
+  project = var.project_id
+}
+
 # Allocate a private IP range for VPC peering
 resource "google_compute_global_address" "private_ip_range" {
   name          = "google-managed-services"
@@ -34,7 +41,7 @@ resource "google_sql_database_instance" "postgres_instance" {
     disk_size = var.disk_size
     ip_configuration {
       ipv4_enabled    = false
-      private_network = data.google_compute_network.vpc.self_link
+      private_network = data.google_compute_subnetwork.subnet.self_link
     }
   }
 
