@@ -41,7 +41,7 @@ resource "google_sql_database_instance" "postgres_instance" {
     disk_size = var.disk_size
     ip_configuration {
       ipv4_enabled    = false
-      private_network = data.google_compute_subnetwork.subnet.self_link
+      private_network = data.google_compute_network.vpc.self_link
     }
   }
 
