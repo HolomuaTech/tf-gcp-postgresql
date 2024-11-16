@@ -1,43 +1,40 @@
 variable "project_id" {
-  description = "The GCP project ID where the database will be created."
+  description = "GCP Project ID"
   type        = string
 }
 
 variable "region" {
-  description = "The region for the Cloud SQL instance."
+  description = "GCP region for the instance"
+  type        = string
+  default     = "us-west1"
+}
+
+variable "vpc_name" {
+  description = "The name of the VPC network"
   type        = string
 }
 
 variable "instance_name" {
-  description = "The name of the Cloud SQL instance."
+  description = "Cloud SQL instance name"
   type        = string
+  default     = "doe-demo-db"
 }
 
 variable "postgres_version" {
-  description = "The PostgreSQL version for the database."
+  description = "PostgreSQL version to use"
   type        = string
   default     = "POSTGRES_14"
 }
 
 variable "instance_size" {
-  description = "The machine type for the Cloud SQL instance."
+  description = "Machine type for the instance"
   type        = string
   default     = "db-f1-micro"
 }
 
 variable "disk_size" {
-  description = "The disk size in GB for the database."
+  description = "Size of the disk in GB"
   type        = number
   default     = 10
-}
-
-variable "vpc_name" {
-  description = "The name of the VPC network where the database will reside."
-  type        = string
-}
-
-variable "subnet_name" {
-  description = "The name of the subnet in the VPC."
-  type        = string
 }
 
