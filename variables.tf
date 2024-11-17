@@ -43,3 +43,8 @@ variable "disk_size" {
   default     = 10
 }
 
+variable "deletion_protection" {
+  description = "Enable or disable deletion protection for the database instance"
+  type        = bool
+  default     = true
+}

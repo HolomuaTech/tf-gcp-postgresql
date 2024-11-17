@@ -31,10 +31,11 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 # Create the PostgreSQL database instance
 resource "google_sql_database_instance" "postgres_instance" {
-  name             = var.instance_name
-  database_version = var.postgres_version
-  region           = var.region
-  project          = var.project_id
+  name                = var.instance_name
+  database_version    = var.postgres_version
+  region              = var.region
+  project             = var.project_id
+  deletion_protection = var.deletion_protection
 
   settings {
     tier      = var.instance_size
