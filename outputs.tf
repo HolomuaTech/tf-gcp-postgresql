@@ -1,9 +1,32 @@
-output "connection_name" {
+# Network information
+output "postgres_connection_name" {
   description = "The connection name of the PostgreSQL instance."
   value       = google_sql_database_instance.postgres_instance.connection_name
 }
 
-output "private_ip" {
+output "postgres_private_ip" {
   description = "The private IP address of the PostgreSQL instance."
   value       = google_sql_database_instance.postgres_instance.private_ip_address
 }
+
+# PostgreSQL Database Details
+output "postgres_database_name" {
+  description = "The name of the primary PostgreSQL database."
+  value       = google_sql_database.postgres_database.name
+}
+
+output "postgres_root_secret_name" {
+  description = "The Secret Manager secret storing the root user password."
+  value       = google_secret_manager_secret.postgres_root_secret.name
+}
+
+output "postgres_credentials" {
+  description = "Connection details for the PostgreSQL instance."
+  value = {
+    host     = google_sql_database_instance.postgres_instance.private_ip_address
+    username = "postgres"
+    password = random_password.postgres_root_password.result
+  }
+  sensitive = true
+}
+

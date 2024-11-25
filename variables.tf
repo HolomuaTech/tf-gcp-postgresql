@@ -48,3 +48,8 @@ variable "deletion_protection" {
   type        = bool
   default     = true
 }
+
+variable "database_name" {
+  description = "The name of the PostgreSQL database to be created."
+  type        = string
+}

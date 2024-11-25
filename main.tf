@@ -13,7 +13,7 @@ data "google_compute_subnetwork" "subnet" {
 
 # Allocate a private IP range for VPC peering
 resource "google_compute_global_address" "private_ip_range" {
-  name          = "google-managed-services"
+  name          = "${var.instance_name}-private-ip-range"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 24
@@ -49,3 +49,30 @@ resource "google_sql_database_instance" "postgres_instance" {
   depends_on = [google_service_networking_connection.private_vpc_connection]
 }
 
+# Create the primary PostgreSQL database
+resource "google_sql_database" "postgres_database" {
+  name     = var.database_name
+  instance = google_sql_database_instance.postgres_instance.name
+  project  = var.project_id
+}
+
+# Store root (postgres) user password in Google Secret Manager
+resource "google_secret_manager_secret" "postgres_root_secret" {
+  secret_id = "${var.instance_name}-postgres-root-password"
+  project   = var.project_id
+  replication {
+    automatic = true
+  }
+}
+
+# Add a secret version with the root password
+resource "google_secret_manager_secret_version" "postgres_root_secret_version" {
+  secret      = google_secret_manager_secret.postgres_root_secret.id
+  secret_data = random_password.postgres_root_password.result
+}
+
+# Generate a random password for the root user
+resource "random_password" "postgres_root_password" {
+  length  = 16
+  special = true
+}
