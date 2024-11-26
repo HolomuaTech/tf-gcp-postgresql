@@ -30,7 +30,9 @@ output "postgres_credentials" {
   sensitive = true
 }
 
+# Output for the database connection secret
 output "postgres_secret_name" {
-  description = "Name of the Postgres root password secret in Secret Manager"
-  value       = google_secret_manager_secret.postgres_root_secret.name
+  description = "The name of the Secret Manager secret storing PostgreSQL connection details."
+  value       = google_secret_manager_secret.postgres_db_secret.name
 }
+

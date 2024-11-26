@@ -71,8 +71,30 @@ resource "google_secret_manager_secret_version" "postgres_root_secret_version" {
   secret_data = random_password.postgres_root_password.result
 }
 
+# Store database connection details in Google Secret Manager
+resource "google_secret_manager_secret" "postgres_db_secret" {
+  secret_id = "${var.instance_name}-db-connection"
+  project   = var.project_id
+  replication {
+    automatic = true
+  }
+}
+
+# Add a secret version with the connection details in JSON format
+resource "google_secret_manager_secret_version" "postgres_db_secret_version" {
+  secret = google_secret_manager_secret.postgres_db_secret.id
+  secret_data = jsonencode({
+    username   = "postgres"
+    password   = random_password.postgres_root_password.result
+    hostname   = google_sql_database_instance.postgres_instance.connection_name
+    database   = var.database_name
+    port       = "5432"
+  })
+}
+
 # Generate a random password for the root user
 resource "random_password" "postgres_root_password" {
   length  = 16
   special = true
 }
+
