@@ -49,11 +49,6 @@ variable "deletion_protection" {
   default     = true
 }
 
-variable "postgres_secret_name" {
-  description = "The name of the Google Secret Manager secret that stores the PostgreSQL connection details."
-  type        = string
-}
-
 variable "database_name" {
   description = "The name of the PostgreSQL database to be created."
   type        = string
