@@ -2,11 +2,9 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 4.0.0, < 5.0.0" # Use the version that works with your module
+      version = ">= 4.85.0, < 5.0.0"
     }
   }
-
-  required_version = ">= 1.0.0"
 }
 
 provider "google" {
