@@ -36,3 +36,8 @@ output "postgres_secret_name" {
   value       = google_secret_manager_secret.postgres_db_secret.name
 }
 
+# Postgres DNS record
+output "postgres_dns_name" {
+  description = "The DNS name for the PostgreSQL instance."
+  value       = "${var.cname_subdomain}-db.${var.dns_name}"
+}

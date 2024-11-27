@@ -54,3 +54,17 @@ variable "database_name" {
   type        = string
 }
 
+variable "dns_zone_name" {
+  description = "Name of the managed DNS zone for the database."
+  type        = string
+}
+
+variable "dns_name" {
+  description = "Base domain name for DNS entries (e.g., example.com)."
+  type        = string
+}
+
+variable "cname_subdomain" {
+  description = "Subdomain for the PostgreSQL database DNS entry."
+  type        = string
+}

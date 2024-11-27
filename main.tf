@@ -98,3 +98,13 @@ resource "random_password" "postgres_root_password" {
   special = true
 }
 
+# Create a DNS record for the PostgreSQL instance
+resource "google_dns_record_set" "postgres_dns_record" {
+  managed_zone = var.dns_zone_name
+  name         = "${var.cname_subdomain}-db.${var.dns_name}."
+  type         = "A" # Assuming you are using a private IP for internal resolution
+  ttl          = 300
+  rrdatas      = [google_sql_database_instance.postgres_instance.private_ip_address]
+  
+  depends_on = [google_sql_database_instance.postgres_instance]
+}
