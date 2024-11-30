@@ -86,7 +86,7 @@ resource "google_secret_manager_secret_version" "postgres_db_secret_version" {
   secret_data = jsonencode({
     username   = "postgres"
     password   = random_password.postgres_root_password.result
-    hostname   = google_sql_database_instance.postgres_instance.connection_name
+    hostname   = "${var.cname_subdomain}-db.${var.dns_name}"
     database   = var.database_name
     port       = "5432"
   })
