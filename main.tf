@@ -60,9 +60,6 @@ resource "google_sql_database" "postgres_database" {
 resource "google_secret_manager_secret" "postgres_root_secret" {
   secret_id = "${var.instance_name}-postgres-root-password"
   project   = var.project_id
-  replication {
-    automatic = {}
-  }
 }
 
 # Add a secret version with the root password
@@ -75,9 +72,6 @@ resource "google_secret_manager_secret_version" "postgres_root_secret_version" {
 resource "google_secret_manager_secret" "postgres_db_secret" {
   secret_id = "${var.instance_name}-db-connection"
   project   = var.project_id
-  replication {
-    automatic = {}
-  }
 }
 
 # Add a secret version with the connection details in JSON format
