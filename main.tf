@@ -61,7 +61,7 @@ resource "google_secret_manager_secret" "postgres_root_secret" {
   secret_id = "${var.instance_name}-postgres-root-password"
   project   = var.project_id
   replication {
-    automatic = true
+    automatic = {}
   }
 }
 
@@ -76,7 +76,7 @@ resource "google_secret_manager_secret" "postgres_db_secret" {
   secret_id = "${var.instance_name}-db-connection"
   project   = var.project_id
   replication {
-    automatic = true
+    automatic = {}
   }
 }
 
@@ -108,3 +108,4 @@ resource "google_dns_record_set" "postgres_dns_record" {
   
   depends_on = [google_sql_database_instance.postgres_instance]
 }
+
