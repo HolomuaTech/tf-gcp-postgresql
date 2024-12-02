@@ -30,7 +30,7 @@ resource "google_secret_manager_secret" "postgres_root_secret" {
   project   = var.project_id
 
   replication {
-    automatic {}
+    auto {}
   }
 }
 
@@ -46,7 +46,7 @@ resource "google_secret_manager_secret" "postgres_db_secret" {
   project   = var.project_id
 
   replication {
-    automatic {}
+    auto {}
   }
 }
 
