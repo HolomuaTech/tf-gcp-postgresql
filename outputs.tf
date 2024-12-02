@@ -1,12 +1,6 @@
-# Network information
 output "postgres_connection_name" {
   description = "The connection name of the PostgreSQL instance."
   value       = google_sql_database_instance.postgres_instance.connection_name
-}
-
-output "postgres_private_ip" {
-  description = "The private IP address of the PostgreSQL instance."
-  value       = google_sql_database_instance.postgres_instance.private_ip_address
 }
 
 # PostgreSQL Database Details
@@ -23,7 +17,7 @@ output "postgres_root_secret_name" {
 output "postgres_credentials" {
   description = "Connection details for the PostgreSQL instance."
   value = {
-    host     = google_sql_database_instance.postgres_instance.private_ip_address
+    host     = google_sql_database_instance.postgres_instance.public_ip_address
     username = "postgres"
     password = random_password.postgres_root_password.result
   }
@@ -41,3 +35,4 @@ output "postgres_dns_name" {
   description = "The DNS name for the PostgreSQL instance."
   value       = "${var.cname_subdomain}-db.${var.dns_name}"
 }
+

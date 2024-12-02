@@ -9,16 +9,6 @@ variable "region" {
   default     = "us-west1"
 }
 
-variable "vpc_name" {
-  description = "The name of the VPC network"
-  type        = string
-}
-
-variable "subnet_name" {
-  description = "The name of the subnet in the VPC"
-  type        = string
-}
-
 variable "instance_name" {
   description = "Cloud SQL instance name"
   type        = string
@@ -68,3 +58,4 @@ variable "cname_subdomain" {
   description = "Subdomain for the PostgreSQL database DNS entry."
   type        = string
 }
+
