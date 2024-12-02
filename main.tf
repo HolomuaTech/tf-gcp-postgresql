@@ -19,6 +19,9 @@ resource "google_sql_database" "postgres_database" {
   name     = var.database_name
   instance = google_sql_database_instance.postgres_instance.name
   project  = var.project_id
+
+  # Ensure the database is created after the instance
+  depends_on = [google_sql_database_instance.postgres_instance]
 }
 
 # Store root (postgres) user password in Google Secret Manager
@@ -26,7 +29,7 @@ resource "google_secret_manager_secret" "postgres_root_secret" {
   secret_id = "${var.instance_name}-postgres-root-password"
   project   = var.project_id
   replication {
-    auto {}
+    automatic = true
   }
 }
 
@@ -41,7 +44,7 @@ resource "google_secret_manager_secret" "postgres_db_secret" {
   secret_id = "${var.instance_name}-db-connection"
   project   = var.project_id
   replication {
-    auto {}
+    automatic = true
   }
 }
 
@@ -49,11 +52,11 @@ resource "google_secret_manager_secret" "postgres_db_secret" {
 resource "google_secret_manager_secret_version" "postgres_db_secret_version" {
   secret = google_secret_manager_secret.postgres_db_secret.id
   secret_data = jsonencode({
-    username   = "postgres"
-    password   = random_password.postgres_root_password.result
-    hostname   = "${var.cname_subdomain}-db.${var.dns_name}"
-    database   = var.database_name
-    port       = "5432"
+    username = "postgres"
+    password = random_password.postgres_root_password.result
+    hostname = "${var.cname_subdomain}-db.${var.dns_name}"
+    database = var.database_name
+    port     = "5432"
   })
 }
 
