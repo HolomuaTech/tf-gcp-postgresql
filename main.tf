@@ -14,6 +14,14 @@ resource "google_sql_database_instance" "postgres_instance" {
   }
 }
 
+# Set the password for the 'postgres' user
+resource "google_sql_user" "postgres_root_user" {
+  name     = "postgres"
+  instance = google_sql_database_instance.postgres_instance.name
+  project  = var.project_id
+  password = random_password.postgres_root_password.result
+}
+
 # Create the primary PostgreSQL database
 resource "google_sql_database" "postgres_database" {
   name     = var.database_name
@@ -64,8 +72,9 @@ resource "google_secret_manager_secret_version" "postgres_db_secret_version" {
 
 # Generate a random password for the root user
 resource "random_password" "postgres_root_password" {
-  length  = 16
-  special = true
+  length           = 16
+  special          = true
+  override_special = "!@#$%^&*()-_=+[]{}<>:;,.?"
 }
 
 # Create a DNS record for the PostgreSQL instance
