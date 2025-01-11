@@ -59,3 +59,11 @@ variable "cname_subdomain" {
   type        = string
 }
 
+variable "authorized_networks" {
+  description = "List of authorized networks for the PostgreSQL instance"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = []
+}
