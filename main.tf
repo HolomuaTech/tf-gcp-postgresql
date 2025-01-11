@@ -8,17 +8,16 @@ resource "google_sql_database_instance" "postgres_instance" {
   settings {
     tier      = var.instance_size
     disk_size = var.disk_size
-
     ip_configuration {
       ipv4_enabled = true
-      authorized_networks = (
-        length(var.authorized_networks) > 0 ? [
-          for network in var.authorized_networks : {
-            name  = network.name
-            value = network.value
-          }
-        ] : []
-      )
+
+      dynamic "authorized_networks" {
+        for_each = var.authorized_networks
+        content {
+          name  = authorized_networks.value.name
+          value = authorized_networks.value.value
+        }
+      }
     }
   }
 }
