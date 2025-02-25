@@ -87,6 +87,7 @@ resource "random_password" "postgres_root_password" {
 
 # Create a DNS record for the PostgreSQL instance
 resource "google_dns_record_set" "postgres_dns_record" {
+  project      = var.dns_project_id
   managed_zone = var.dns_zone_name
   name         = "${var.cname_subdomain}-db.${var.dns_name}."
   type         = "A"

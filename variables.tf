@@ -44,6 +44,11 @@ variable "database_name" {
   type        = string
 }
 
+variable "dns_project_id" {
+  description = "The project ID where the DNS zone exists"
+  type        = string
+}
+
 variable "dns_zone_name" {
   description = "Name of the managed DNS zone for the database."
   type        = string

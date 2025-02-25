@@ -36,3 +36,28 @@ output "postgres_dns_name" {
   value       = "${var.cname_subdomain}-db.${var.dns_name}"
 }
 
+output "instance_name" {
+  description = "The name of the PostgreSQL instance"
+  value       = google_sql_database_instance.postgres_instance.name
+}
+
+output "instance_ip" {
+  description = "The public IP address of the PostgreSQL instance"
+  value       = google_sql_database_instance.postgres_instance.public_ip_address
+}
+
+output "connection_name" {
+  description = "The connection name of the PostgreSQL instance"
+  value       = google_sql_database_instance.postgres_instance.connection_name
+}
+
+output "database_name" {
+  description = "The name of the database"
+  value       = google_sql_database.postgres_database.name
+}
+
+output "database_hostname" {
+  description = "The DNS hostname of the database"
+  value       = "${var.cname_subdomain}-db.${var.dns_name}"
+}
+
