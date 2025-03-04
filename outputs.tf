@@ -11,26 +11,9 @@ output "postgres_database_name" {
 
 output "postgres_root_secret_name" {
   description = "The Secret Manager secret storing the root user password."
-  value       = google_secret_manager_secret.postgres_root_secret.name
+  value       = "projects/${var.project_id}/secrets/${google_secret_manager_secret.postgres_root_secret.secret_id}"
 }
 
-output "postgres_credentials" {
-  description = "Connection details for the PostgreSQL instance."
-  value = {
-    host     = google_sql_database_instance.postgres_instance.public_ip_address
-    username = "postgres"
-    password = random_password.postgres_root_password.result
-  }
-  sensitive = true
-}
-
-# Output for the database connection secret
-output "postgres_secret_name" {
-  description = "The name of the Secret Manager secret storing PostgreSQL connection details."
-  value       = google_secret_manager_secret.postgres_db_secret.name
-}
-
-# Postgres DNS record
 output "postgres_dns_name" {
   description = "The DNS name for the PostgreSQL instance."
   value       = "${var.cname_subdomain}-db.${var.dns_name}"
@@ -54,10 +37,5 @@ output "connection_name" {
 output "database_name" {
   description = "The name of the database"
   value       = google_sql_database.postgres_database.name
-}
-
-output "database_hostname" {
-  description = "The DNS hostname of the database"
-  value       = "${var.cname_subdomain}-db.${var.dns_name}"
 }
 

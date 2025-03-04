@@ -72,3 +72,9 @@ variable "authorized_networks" {
   }))
   default = []
 }
+
+variable "edition" {
+  description = "The edition of the database (ENTERPRISE or ENTERPRISE_PLUS)"
+  type        = string
+  default     = "ENTERPRISE"
+}

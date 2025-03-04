@@ -8,6 +8,7 @@ resource "google_sql_database_instance" "postgres_instance" {
   settings {
     tier      = var.instance_size
     disk_size = var.disk_size
+    edition   = var.edition
     ip_configuration {
       ipv4_enabled = true
 
@@ -18,6 +19,10 @@ resource "google_sql_database_instance" "postgres_instance" {
           value = authorized_networks.value.value
         }
       }
+    }
+    backup_configuration {
+      enabled = true
+      point_in_time_recovery_enabled = true
     }
   }
 }
@@ -56,28 +61,6 @@ resource "google_secret_manager_secret_version" "postgres_root_secret_version" {
   secret_data = random_password.postgres_root_password.result
 }
 
-# Store database connection details in Google Secret Manager
-resource "google_secret_manager_secret" "postgres_db_secret" {
-  secret_id = "${var.instance_name}-db-connection"
-  project   = var.project_id
-
-  replication {
-    auto {}
-  }
-}
-
-# Add a secret version with the connection details in JSON format
-resource "google_secret_manager_secret_version" "postgres_db_secret_version" {
-  secret = google_secret_manager_secret.postgres_db_secret.id
-  secret_data = jsonencode({
-    username = "postgres"
-    password = random_password.postgres_root_password.result
-    hostname = "${var.cname_subdomain}-db.${var.dns_name}"
-    database = var.database_name
-    port     = "5432"
-  })
-}
-
 # Generate a random password for the root user
 resource "random_password" "postgres_root_password" {
   length           = 16
@@ -95,5 +78,11 @@ resource "google_dns_record_set" "postgres_dns_record" {
   rrdatas      = [google_sql_database_instance.postgres_instance.public_ip_address]
 
   depends_on = [google_sql_database_instance.postgres_instance]
+}
+
+# Output the secret name for other resources to use
+output "db_password_secret_id" {
+  description = "The ID of the Secret Manager secret containing the database password"
+  value       = google_secret_manager_secret.postgres_root_secret.secret_id
 }
 
