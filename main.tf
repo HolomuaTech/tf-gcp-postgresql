@@ -9,6 +9,16 @@ resource "google_sql_database_instance" "postgres_instance" {
     tier      = var.instance_size
     disk_size = var.disk_size
     edition   = var.edition
+
+    # Enable IAM authentication if requested
+    dynamic "database_flags" {
+      for_each = var.enable_iam_auth ? [1] : []
+      content {
+        name  = "cloudsql.iam_authentication"
+        value = "on"
+      }
+    }
+
     ip_configuration {
       ipv4_enabled = true
 
@@ -21,7 +31,7 @@ resource "google_sql_database_instance" "postgres_instance" {
       }
     }
     backup_configuration {
-      enabled = true
+      enabled                        = true
       point_in_time_recovery_enabled = true
     }
   }
@@ -80,9 +90,5 @@ resource "google_dns_record_set" "postgres_dns_record" {
   depends_on = [google_sql_database_instance.postgres_instance]
 }
 
-# Output the secret name for other resources to use
-output "db_password_secret_id" {
-  description = "The ID of the Secret Manager secret containing the database password"
-  value       = google_secret_manager_secret.postgres_root_secret.secret_id
-}
+# End of file - no outputs here
 
