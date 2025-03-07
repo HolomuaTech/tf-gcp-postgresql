@@ -78,3 +78,9 @@ variable "edition" {
   type        = string
   default     = "ENTERPRISE"
 }
+
+variable "enable_iam_auth" {
+  description = "Enable IAM authentication for the PostgreSQL instance"
+  type        = bool
+  default     = true
+}
